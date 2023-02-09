@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import { Radio } from '@mantine/core';
 import { UseFormReturnType } from '@mantine/form';
 import { FormValues } from '@/types';
@@ -9,19 +9,23 @@ type Props = {
   label?: string;
   description?: string;
   withAsterisk?: boolean;
-  contents: Content[];
+  contents?: Content[];
   form: UseFormReturnType<FormValues, (values: FormValues) => FormValues>;
-  id: keyof FormValues;
+  id: string;
 };
 
-export const RadioGroup: FC<Props> = ({
-  contents,
+const RadioGroupMemo: FC<Props> = ({
   form,
   id,
   name = 'radio',
   label = 'label',
   description = 'description',
   withAsterisk = false,
+  contents = [
+    { value: '1', label: 'React' },
+    { value: '2', label: 'Vue' },
+    { value: '3', label: 'Angular' },
+  ],
 }) => {
   return (
     <Radio.Group
@@ -31,9 +35,11 @@ export const RadioGroup: FC<Props> = ({
       withAsterisk={withAsterisk}
       {...form.getInputProps(id)}
     >
-      {contents.map((content, i) => (
+      {contents!.map((content, i) => (
         <Radio key={i} label={content.label} value={content.value} />
       ))}
     </Radio.Group>
   );
 };
+
+export const RadioGroup = memo(RadioGroupMemo);

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import { Select } from '@mantine/core';
 import { UseFormReturnType } from '@mantine/form';
 import { FormValues } from '@/types';
@@ -7,10 +7,10 @@ type Props = {
   placeholder?: string;
   label?: string;
   form: UseFormReturnType<FormValues, (values: FormValues) => FormValues>;
-  id: keyof FormValues;
+  id: string;
 };
 
-export const SelectBox: FC<Props> = ({
+const SelectBoxMemo: FC<Props> = ({
   placeholder = 'Pick one',
   label = 'Your favorite framework/library',
   form,
@@ -30,3 +30,5 @@ export const SelectBox: FC<Props> = ({
     />
   );
 };
+
+export const SelectBox = memo(SelectBoxMemo);

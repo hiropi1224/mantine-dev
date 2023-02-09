@@ -1,18 +1,18 @@
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import { TextInput } from '@mantine/core';
 import { UseFormReturnType } from '@mantine/form/lib/types';
 import { FormValues } from '@/types';
 
 type Props = {
   form: UseFormReturnType<FormValues, (values: FormValues) => FormValues>;
-  id: keyof FormValues;
+  id: string;
   placeholder?: string;
   label?: string;
   description?: string;
   withAsterisk?: boolean;
 };
 
-export const TextBox: FC<Props> = ({
+const TextBoxMemo: FC<Props> = ({
   form,
   id,
   placeholder = 'placeholder',
@@ -30,3 +30,5 @@ export const TextBox: FC<Props> = ({
     />
   );
 };
+
+export const TextBox = memo(TextBoxMemo);
