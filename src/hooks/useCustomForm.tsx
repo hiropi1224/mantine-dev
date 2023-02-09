@@ -8,12 +8,10 @@ const [FormProvider, useFormContext, useForm] = createFormContext<FormValues>();
 
 export const useCustomForm = (): {
   readonly FormProvider: FC<
-    FormProviderProps<
-      UseFormReturnType<FormValues, (values: FormValues) => FormValues>
-    >
+    FormProviderProps<UseFormReturnType<any, (values: any) => any>>
   >;
-  readonly useFormContext: () => UseFormReturnType<FormValues>;
-  readonly useForm: UseForm<FormValues>;
+  readonly useFormContext: () => UseFormReturnType<any>;
+  readonly useForm: UseForm<any>;
 } => {
   return { FormProvider, useFormContext, useForm } as const;
 };
