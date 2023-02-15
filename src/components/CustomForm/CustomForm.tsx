@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
 import { Button } from '@mantine/core';
+import { isEmail } from '@mantine/form';
 // eslint-disable-next-line import/extensions
 import data from '@/data/question.json';
 import { useCustomForm } from '@/hooks/useCustomForm';
@@ -10,6 +11,8 @@ export const CustomForm: FC = () => {
   const { useForm, FormProvider } = useCustomForm();
 
   const [initialValues, setInitialValues] = useState({});
+
+  // inputTypeCodeに応じた初期値を返す
   const returnValue = (code: string) => {
     switch (code) {
       case 'INPUT_TYPE_CHECK_BOX':
@@ -29,10 +32,31 @@ export const CustomForm: FC = () => {
         break;
     }
   };
+
+  // データからバリデーション用関数作成
+  const returnValidate = (code: string) => {
+    switch (code) {
+      case 'NUMBER':
+        return (value) => (value?.length < 8 ? '8文字未満' : null);
+        break;
+      case 'EMAIL':
+        return isEmail('Invalid email');
+        break;
+      case 'STRING':
+        return (value) => (value?.length < 2 ? '2文字未満' : null);
+        break;
+      default:
+        return '';
+        break;
+    }
+  };
+
+  // オブジェクトの空判定用
   const isEmpty = (obj: Record<string, never>) => {
     return Object.keys(obj).length === 0;
   };
 
+  // useFormに渡す初期値作成
   const convert = () => {
     const keys = data.entryQuestions.map((question) => {
       return question.entryQuestionId;
@@ -49,16 +73,39 @@ export const CustomForm: FC = () => {
     return obj;
   };
 
+  // useFormに渡すバリデーションオブジェクト作成
+  const convertValidate = () => {
+    const keys = data.entryQuestions.map((question) => {
+      return question.entryQuestionId;
+    });
+    const values = data.entryQuestions.map((question) => {
+      return returnValidate(question.entryChoices[0].validateCheckTypeCode);
+    });
+    const obj = keys.reduce((acc: any, key, index) => {
+      acc[key] = values[index];
+
+      return acc;
+    }, {});
+
+    return obj;
+  };
+
   const form = useForm({
+    validateInputOnChange: true,
     initialValues: {
       ...initialValues,
     },
+    validate: { ...convertValidate() },
   });
+
+  const onClick = () => {
+    setInitialValues(convert());
+  };
 
   if (isEmpty(initialValues))
     return (
       <div>
-        <Button onClick={() => setInitialValues(convert())}>set value</Button>
+        <Button onClick={onClick}>set value</Button>
       </div>
     );
 
