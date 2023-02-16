@@ -2,17 +2,14 @@ import React, { FC } from 'react';
 import { Space } from '@mantine/core';
 import { UseFormReturnType } from '@mantine/form';
 import { FormValues } from '@/types';
+import { InputTypeCode } from '@/types';
 import { Check } from '@/components/Checkbox';
 import { RadioGroup } from '@/components/Radio';
 import { SelectBox } from '@/components/Select';
 import { TextBox } from '@/components/TextBox';
 
 type Props = {
-  code:
-    | 'INPUT_TYPE_CHECK_BOX'
-    | 'INPUT_TYPE_TEXTBOX_1'
-    | 'INPUT_TYPE_RADIO'
-    | 'INPUT_TYPE_SELECT_BOX';
+  code: InputTypeCode;
   form: UseFormReturnType<FormValues, (values: FormValues) => FormValues>;
   id: string;
   label: string;

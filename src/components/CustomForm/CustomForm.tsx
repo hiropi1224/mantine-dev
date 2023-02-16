@@ -4,6 +4,7 @@ import { isEmail } from '@mantine/form';
 // eslint-disable-next-line import/extensions
 import data from '@/data/question.json';
 import { useCustomForm } from '@/hooks/useCustomForm';
+import { InputTypeCode } from '@/types';
 import { FormBase } from '@/components/FormBase';
 import { FormSelector } from '@/components/FormSelector/FormSelector';
 
@@ -37,13 +38,13 @@ export const CustomForm: FC = () => {
   const returnValidate = (code: string) => {
     switch (code) {
       case 'NUMBER':
-        return (value) => (value?.length < 8 ? '8文字未満' : null);
+        return (value: string) => (value?.length < 8 ? '8文字未満' : null);
         break;
       case 'EMAIL':
         return isEmail('Invalid email');
         break;
       case 'STRING':
-        return (value) => (value?.length < 2 ? '2文字未満' : null);
+        return (value: string) => (value?.length < 2 ? '2文字未満' : null);
         break;
       default:
         return '';
@@ -126,7 +127,7 @@ export const CustomForm: FC = () => {
               title={question.questionTitle}
             >
               <FormSelector
-                code={question.entryChoices[0].inputTypeCode}
+                code={question.entryChoices[0].inputTypeCode as InputTypeCode}
                 id={question.entryQuestionId}
                 form={form}
                 label={question.questionText}
